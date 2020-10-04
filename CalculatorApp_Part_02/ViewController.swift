@@ -8,13 +8,23 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController
+    {
 
+    @IBOutlet weak var ResultLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
 
-
+    @IBAction func OnNumberButton_Press(_ sender: UIButton)
+    {
+        print(sender.titleLabel?.text)
+    }
+    
+    @IBAction func OnOperatorButton_Press(_ sender: UIButton)
+    {
+        print(sender.titleLabel?.text)
+    }
 }
 
