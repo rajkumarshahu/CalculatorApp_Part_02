@@ -28,10 +28,9 @@
                                         <rect key="frame" x="0.0" y="116" width="400" height="109.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ogU-ZW-2BT">
-                                                <rect key="frame" x="360" y="29.5" width="26" height="50.5"/>
+                                                <rect key="frame" x="363.5" y="29.5" width="22.5" height="50.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50.329999999999998" id="IDt-ba-gHu"/>
-                                                    <constraint firstAttribute="width" constant="26" id="SdF-92-FVD"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="40"/>
                                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -40,7 +39,7 @@
                                         </subviews>
                                         <color key="backgroundColor" red="0.94767647980000003" green="0.95623117690000003" blue="0.95579999689999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstItem="ogU-ZW-2BT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="m5E-ND-NaG" secondAttribute="leading" constant="20" symbolic="YES" id="NcR-uD-eBM"/>
+                                            <constraint firstItem="ogU-ZW-2BT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="m5E-ND-NaG" secondAttribute="leading" constant="20" symbolic="YES" id="CsK-eF-PWn"/>
                                             <constraint firstItem="ogU-ZW-2BT" firstAttribute="centerY" secondItem="m5E-ND-NaG" secondAttribute="centerY" id="VQj-8A-pxo"/>
                                             <constraint firstAttribute="trailing" secondItem="ogU-ZW-2BT" secondAttribute="trailing" constant="14" id="qEw-CZ-Nuc"/>
                                         </constraints>
