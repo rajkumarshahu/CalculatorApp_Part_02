@@ -14,10 +14,9 @@ class ViewController: UIViewController
         var operand2: Double = 0.0
         var result: Double = 0.0
         var activeOperation: String = ""
-        var activeNumber: String = ""
-        var operation_result = 0.0;
-        var old_operator = "";
-    var is_active = true;
+        var operation_result = 0.0
+        var old_operator = ""
+        var is_active = true
 
     @IBOutlet weak var ResultLabel: UILabel!
     
@@ -30,12 +29,12 @@ class ViewController: UIViewController
         switch sender.titleLabel?.text! {
         case "C":
             ResultLabel.text! = "0"
-            operand1=0.0
-            operand2=0.0
+            operand1 = 0.0
+            operand2 = 0.0
             operation_result = 0.0
             activeOperation = ""
             old_operator = ""
-            is_active = true;
+            is_active = true
         case "⌫":
             ResultLabel.text!.removeLast()
             if((ResultLabel.text!.count < 1) || (ResultLabel.text! == "-"))
@@ -46,6 +45,8 @@ class ViewController: UIViewController
             if(!ResultLabel.text!.contains("."))
             {
                 ResultLabel.text! += "."
+            }else if (!ResultLabel.text!.contains("0")){
+                 ResultLabel.text! += "0."
             }
         case "+/-":
             if(ResultLabel.text! != "0")
@@ -66,28 +67,27 @@ class ViewController: UIViewController
                 is_active = false;
             } else
             {
-                if(ResultLabel.text!.count > 7 ) {
+                if(ResultLabel.text!.count > 15 ) {
                     return
                 }
                 ResultLabel.text! += sender.titleLabel!.text!
             }
         }
         
-        if(ResultLabel.text!.contains("."))
-        {
-           print(Double(ResultLabel.text!)!)
-        }
-        else
-        {
-           print(Int(ResultLabel.text!)!)
-        }
-        
+//        if(ResultLabel.text!.contains(".") && ResultLabel.text!.count < 15)
+//        {
+//           print(Double(ResultLabel.text!)!)
+//        }
+//        else
+//        {
+//           print(Int(ResultLabel.text!)!)
+//        }
     }
     
     @IBAction func OnOperatorButton_Press(_ sender: UIButton)
     {
         activeOperation = sender.titleLabel!.text!
-        
+    
         if(old_operator == "") {
             old_operator = activeOperation
             is_active = true;
@@ -104,8 +104,12 @@ class ViewController: UIViewController
         
         if(operand2 == 0.0 && activeOperation != "=")
         {
-            //print("operand2")
             return
+        }
+        
+        if(activeOperation == "%")
+        {
+            operand2 = operand2 / 100
         }
         
         switch old_operator
@@ -119,19 +123,26 @@ class ViewController: UIViewController
             operation_result = operand1 * operand2
         case "÷":
             operation_result = operand1 / operand2
-        case "%":
-            print(sender.titleLabel!.text!)
-            print(old_operator)
         case "=":
-            operation_result = operand1;
+            operation_result = operand1
         default:
             print("Error....")
         }
         operand1 = operation_result
-        operand2 = 0.00;
+        operand2 = 0.00
         old_operator = activeOperation
         is_active = true
-        ResultLabel.text! = String(round(pow(10, 9)*operation_result)/pow(10, 9))
+        
+        let str = String(operation_result)
+        var substr = ""
+        if(str.count>14) {
+            let index = str.index(str.startIndex, offsetBy: 15)
+            substr = String(str.prefix(upTo: index))
+        } else {
+            substr = str
+        }
+    
+        ResultLabel.text! = substr
         operation_result = 0.00;
     }
 }
