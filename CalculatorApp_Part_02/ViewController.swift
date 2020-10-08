@@ -1,22 +1,22 @@
-//
-//  ViewController.swift
-//  CalculatorApp_Part_02
-//
-//  Created by Raj Kumar Shahu on 2020-10-02.
-//  Copyright © 2020 Centennial College. All rights reserved.
-//
+/*
+    *  ViewController.swift
+    *  CalculatorApp_Part_02
+    *  Created by Raj Kumar Shahu on 2020-10-02.
+    *  StudentID: 300783746
+    *  Description:
+            This is second part of Calculator App assignment. In this part logic is implemented to make the Calculator App functioning.
+ */
 
 import UIKit
 
 class ViewController: UIViewController
     {
-        var operand1: Double = 0.0
-        var operand2: Double = 0.0
-        var result: Double = 0.0
-        var activeOperation: String = ""
-        var operation_result = 0.0
-        var old_operator = ""
-        var is_active = true
+        var leftOperand: Double = 0.0
+        var rightOperand: Double = 0.0
+        var clickedOperator: String = ""
+        var operationResult = 0.0
+        var activeOperator = ""
+        var resetInputLabel = true
 
     @IBOutlet weak var ResultLabel: UILabel!
     
@@ -29,12 +29,12 @@ class ViewController: UIViewController
         switch sender.titleLabel?.text! {
         case "C":
             ResultLabel.text! = "0"
-            operand1 = 0.0
-            operand2 = 0.0
-            operation_result = 0.0
-            activeOperation = ""
-            old_operator = ""
-            is_active = true
+            leftOperand = 0.0 // left operand for the operation
+            rightOperand = 0.0 // right opernad for the operation
+            operationResult = 0.0 //result of operation = leftOperand activeOperator rightOperand
+            clickedOperator = "" // currently clicked Operator
+            activeOperator = "" // active operator
+            resetInputLabel = true // resetInputLabel  = true means start of operation and when we click numbers it will replace existing numbers.
         case "⌫":
             ResultLabel.text!.removeLast()
             if((ResultLabel.text!.count < 1) || (ResultLabel.text! == "-"))
@@ -61,10 +61,12 @@ class ViewController: UIViewController
                 }
             }
         default:
-            if(is_active || ResultLabel.text! == "0")
+            // This gets executed when we click numbers
+            if(resetInputLabel || ResultLabel.text! == "0")
             {
+                // if start this is executed
                 ResultLabel.text = sender.titleLabel!.text!
-                is_active = false;
+                resetInputLabel = false;
             } else
             {
                 if(ResultLabel.text!.count > 15 ) {
@@ -73,77 +75,95 @@ class ViewController: UIViewController
                 ResultLabel.text! += sender.titleLabel!.text!
             }
         }
-        
-//        if(ResultLabel.text!.contains(".") && ResultLabel.text!.count < 15)
-//        {
-//           print(Double(ResultLabel.text!)!)
-//        }
-//        else
-//        {
-//           print(Int(ResultLabel.text!)!)
-//        }
     }
     
     @IBAction func OnOperatorButton_Press(_ sender: UIButton)
     {
-        activeOperation = sender.titleLabel!.text!
-    
-        if(old_operator == "") {
-            old_operator = activeOperation
-            is_active = true;
-        }
+        // when operator is clicked this gets executed
+        clickedOperator = sender.titleLabel!.text!
         
-        if(operation_result != 0.0) {
-            return
-        }
-        if(operand1 != 0.0) {
-            operand2 = Double(ResultLabel.text!)!
-        } else {
-            operand1 = Double(ResultLabel.text!)!
-        }
-        
-        if(operand2 == 0.0 && activeOperation != "=")
-        {
+        // Do not execute % when right operand is not set
+        if (clickedOperator == "%" && rightOperand == 0.0){
             return
         }
         
-        if(activeOperation == "%")
+    
+        if(activeOperator == "")
         {
-            operand2 = operand2 / 100
+            activeOperator = clickedOperator
+            resetInputLabel = true;
         }
         
-        switch old_operator
-        {
-        case "+":
-            print(operand2)
-            operation_result = operand1 + operand2
-        case "-":
-            operation_result = operand1 - operand2
-        case "X":
-            operation_result = operand1 * operand2
-        case "÷":
-            operation_result = operand1 / operand2
-        case "=":
-            operation_result = operand1
-        default:
-            print("Error....")
+        if(operationResult != 0.0) {
+            return // exit the code block
         }
-        operand1 = operation_result
-        operand2 = 0.00
-        old_operator = activeOperation
-        is_active = true
         
-        let str = String(operation_result)
-        var substr = ""
-        if(str.count>14) {
-            let index = str.index(str.startIndex, offsetBy: 15)
-            substr = String(str.prefix(upTo: index))
+        
+        if(leftOperand != 0.0)
+        {
+            rightOperand = Double(ResultLabel.text!)!
+        }
+        else
+        {
+            leftOperand = Double(ResultLabel.text!)!
+        }
+        
+        if(rightOperand == 0.0 && clickedOperator != "=")
+        {
+            return // exit the block if rightOperand is zero. If currently currentClicked operator is "=" we will not exit the function but we will show operationResult
+        }
+        
+        
+        // this part of the code gets executed
+                // only if we have both left and right operands and active Operator
+        
+        // this is special case for "%" computation
+        if(clickedOperator == "%")
+        {
+            rightOperand = rightOperand / 100
+        }
+        
+        switch activeOperator
+        {
+            case "+":
+                operationResult = leftOperand + rightOperand
+            case "-":
+                operationResult = leftOperand - rightOperand
+            case "X":
+                operationResult = leftOperand * rightOperand
+            case "÷":
+                operationResult = leftOperand / rightOperand
+            case "=":
+                operationResult = leftOperand
+            default:
+                print("Error....")
+        }
+        // reset process for next operation
+        leftOperand = operationResult
+        rightOperand = 0.00
+        activeOperator = clickedOperator
+        resetInputLabel = true
+        operationResult = 0.00;
+        
+        var resultStr = "";
+        
+        if(leftOperand.truncatingRemainder(dividingBy: 1) == 0)
+        {
+            resultStr = String(Int(leftOperand));
+        }else {
+            resultStr = String(leftOperand);
+        }
+        var resultSubstr = ""
+        
+        if(resultStr.count > 15)
+        {
+            // Clip the irrational number (or recurring decimal result) to only 15 digits
+            resultSubstr = String(resultStr.prefix(upTo: resultStr.index(resultStr.startIndex, offsetBy: 15)))
         } else {
-            substr = str
+            resultSubstr = resultStr
         }
     
-        ResultLabel.text! = substr
-        operation_result = 0.00;
+        ResultLabel.text! = resultSubstr
     }
 }
 
