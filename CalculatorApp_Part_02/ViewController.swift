@@ -4,19 +4,21 @@
     *  Created by Raj Kumar Shahu on 2020-10-02.
     *  StudentID: 300783746
     *  Description:
-            This is second part of Calculator App assignment. In this part logic is implemented to make the Calculator App functioning.
+            * This is the second part of the Calculator App assignment.
+            * In this part, logic is implemented to make the Calculator App functioning.
  */
 
 import UIKit
 
 class ViewController: UIViewController
     {
-        var leftOperand: Double = 0.0
-        var rightOperand: Double = 0.0
-        var clickedOperator: String = ""
-        var operationResult = 0.0
-        var activeOperator = ""
-        var resetInputLabel = true
+        var leftOperand = 0.0       // left operand for the operation
+        var rightOperand = 0.0      // right opernad for the operation
+        var clickedOperator = ""    // currently clicked Operator
+        var activeOperator = ""     // active operator
+        var operationResult = 0.0   //result of operation = leftOperand activeOperator rightOperand
+        var resetInputLabel = true  // resetInputLabel  = true means start of operation
+                                                    // also when we click numbers it will replace existing numbers.
 
     @IBOutlet weak var ResultLabel: UILabel!
     
@@ -26,15 +28,16 @@ class ViewController: UIViewController
 
     @IBAction func OnNumberButton_Press(_ sender: UIButton)
     {
-        switch sender.titleLabel?.text! {
+        switch sender.titleLabel?.text!
+        {
         case "C":
             ResultLabel.text! = "0"
-            leftOperand = 0.0 // left operand for the operation
-            rightOperand = 0.0 // right opernad for the operation
-            operationResult = 0.0 //result of operation = leftOperand activeOperator rightOperand
-            clickedOperator = "" // currently clicked Operator
-            activeOperator = "" // active operator
-            resetInputLabel = true // resetInputLabel  = true means start of operation and when we click numbers it will replace existing numbers.
+            leftOperand = 0.0
+            rightOperand = 0.0
+            operationResult = 0.0
+            clickedOperator = ""
+            activeOperator = ""
+            resetInputLabel = true
         case "⌫":
             ResultLabel.text!.removeLast()
             if((ResultLabel.text!.count < 1) || (ResultLabel.text! == "-"))
@@ -42,10 +45,11 @@ class ViewController: UIViewController
                 ResultLabel.text! = "0"
             }
         case ".":
-            if(!ResultLabel.text!.contains("."))
+            if(!ResultLabel.text!.contains(".")) // Gets concatenated to decimal
             {
                 ResultLabel.text! += "."
-            }else if (!ResultLabel.text!.contains("0")){
+            }
+            else if (!ResultLabel.text!.contains("0")){ // Gets concatenated to "0."
                  ResultLabel.text! += "0."
             }
         case "+/-":
@@ -67,9 +71,11 @@ class ViewController: UIViewController
                 // if start this is executed
                 ResultLabel.text = sender.titleLabel!.text!
                 resetInputLabel = false;
-            } else
+            }
+            else
             {
-                if(ResultLabel.text!.count > 15 ) {
+                if(ResultLabel.text!.count > 15 ) // This will restrict the result character to no more than 15
+                {
                     return
                 }
                 ResultLabel.text! += sender.titleLabel!.text!
@@ -81,11 +87,6 @@ class ViewController: UIViewController
     {
         // when operator is clicked this gets executed
         clickedOperator = sender.titleLabel!.text!
-        
-        // Do not execute % when right operand is not set
-        if (clickedOperator == "%" && rightOperand == 0.0){
-            return
-        }
         
     
         if(activeOperator == "")
@@ -136,9 +137,9 @@ class ViewController: UIViewController
             case "=":
                 operationResult = leftOperand
             default:
-                print("Error....")
+                ResultLabel.text! = "Wrong operation!!!"
         }
-        // reset process for next operation
+        // Reset process for next operation
         leftOperand = operationResult
         rightOperand = 0.00
         activeOperator = clickedOperator
@@ -147,6 +148,7 @@ class ViewController: UIViewController
         
         var resultStr = "";
         
+        // Removes the meaningless .0 if appears after whole number
         if(leftOperand.truncatingRemainder(dividingBy: 1) == 0)
         {
             resultStr = String(Int(leftOperand));
